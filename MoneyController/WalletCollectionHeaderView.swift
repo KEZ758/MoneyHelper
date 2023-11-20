@@ -7,47 +7,50 @@
 
 import UIKit
 
+protocol WalletsHeaderViewDelegate: AnyObject {
+    func didSignUpBtnTapped()
+}
 
-class WalletsHeaderView: UICollectionReusableView {
-    let titleLabel: UILabel = {
+final class WalletsHeaderView: BaseView {
+    
+    weak var delegate: WalletsHeaderViewDelegate?
+    
+    private let titleLabel: UILabel = {
         let label = UILabel()
+        label.text = "Wallets"
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
-    let seeAllButton: UIButton = {
+    private let seeAllButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("See All", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.addTarget(WalletsHeaderView.self, action: #selector(seeAllButtonTapped), for: .touchUpInside)
+        button.addTarget(WalletsHeaderView.self, action: #selector(signUpBtnHandler), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    // Добавьте необходимые действия для кнопки, например, переход к другому экрану
+    
     @objc private func seeAllButtonTapped() {
-        // Ваш код для обработки нажатия кнопки "See All"
+        
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-    }
+   
+}
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setupUI()
-    }
-
-    private func setupUI() {
-        // Настройка UI вашего заголовка, располагая titleLabel и seeAllButton справа от него
+extension WalletsHeaderView {
+    override func setupViews() {
+        super.setupViews()
+        translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         addSubview(seeAllButton)
-
-        // Добавьте необходимые Auto Layout ограничения
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        seeAllButton.translatesAutoresizingMaskIntoConstraints = false
-
+        
+    }
+    override func constraintViews() {
+        super.constraintViews()
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             titleLabel.topAnchor.constraint(equalTo: topAnchor),
@@ -55,5 +58,15 @@ class WalletsHeaderView: UICollectionReusableView {
             seeAllButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             seeAllButton.topAnchor.constraint(equalTo: topAnchor)
         ])
+    }
+    override func configureAppearance() {
+        super.configureAppearance()
+        
+        
+    }
+}
+extension WalletsHeaderView {
+    @objc func signUpBtnHandler() {
+        delegate?.didSignUpBtnTapped()
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 class WalletCollectionViewCell: UICollectionViewCell {
-    var backImage: UIImageView = {
+    private var backImage: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
         image.layer.cornerRadius = 14
@@ -18,10 +18,16 @@ class WalletCollectionViewCell: UICollectionViewCell {
         
         return image
     }()
-    private weak var imageCard: UIImageView!
+    private var imageCard: UIImageView = {
+        let image = UIImageView()
+        image.contentMode = .scaleAspectFill
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+        
+    }()
     
     
-    var totalBalance: UILabel = {
+    private var totalBalance: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
         label.textColor = .black
@@ -30,8 +36,22 @@ class WalletCollectionViewCell: UICollectionViewCell {
     }()
     
     
-    private weak var cardOrCachLabel: UILabel!
-    private weak var balance: UILabel!
+    private var cardOrCachLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 10, weight: .regular)
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+        
+    }()
+    private var balance: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+        label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+        
+    }()
     
     
     override init(frame: CGRect) {
@@ -50,6 +70,10 @@ class WalletCollectionViewCell: UICollectionViewCell {
     private func setup(){
         contentView.addSubview(backImage)
         contentView.addSubview(totalBalance)
+        contentView.addSubview(imageCard)
+        contentView.addSubview(balance)
+        contentView.addSubview(cardOrCachLabel)
+        
         
         
         NSLayoutConstraint.activate([
@@ -60,13 +84,29 @@ class WalletCollectionViewCell: UICollectionViewCell {
             
             totalBalance.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             totalBalance.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            
+            imageCard.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
+            imageCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            imageCard.heightAnchor.constraint(equalToConstant: 24),
+            imageCard.widthAnchor.constraint(equalToConstant: 24),
+            
+            balance.topAnchor.constraint(equalTo: totalBalance.bottomAnchor, constant: 8),
+            balance.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            
+            cardOrCachLabel.topAnchor.constraint(equalTo: balance.bottomAnchor, constant: 14),
+            cardOrCachLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12)
+            
         ])
         
     }
     
-//    func setImage(image: UIImageView) {
-//        self.backImage.image = image.image
-//    }
+    func setImage(image: WalletModel) {
+        backImage.image = image.cardImage
+        imageCard.image = image.iconImage
+        totalBalance.text = image.totalBalance
+        balance.text = ("\(image.balance)")
+        cardOrCachLabel.text = image.bankNameOrCache
+    }
     
     
 }

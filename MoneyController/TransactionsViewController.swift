@@ -7,23 +7,20 @@
 
 import UIKit
 
-class TransactionsViewController: UIViewController {
+class TransactionsViewController: BaseController {
     
     
     
-    var dataImage = [
-    "88",
-    "88",
-    "88",
-    "88"
+    var dataImage: [WalletModel] = [
+    WalletModel(cardImage: #imageLiteral(resourceName: "walletBack"), iconImage: #imageLiteral(resourceName: "cardLogo"), totalBalance: "Total balance", balance: 100000.0, bankNameOrCache: "Bank"),
+    WalletModel(cardImage: #imageLiteral(resourceName: "GreenCard"), iconImage: #imageLiteral(resourceName: "Image"), totalBalance: "Total balance", balance: 100000.0, bankNameOrCache: "Cach"),
+    WalletModel(cardImage: #imageLiteral(resourceName: "walletBack"), iconImage: #imageLiteral(resourceName: "cardLogo"), totalBalance: "Total balance", balance: 100000.0, bankNameOrCache: "Bank"),
+    WalletModel(cardImage: #imageLiteral(resourceName: "walletBack"), iconImage: #imageLiteral(resourceName: "cardLogo"), totalBalance: "Total balance", balance: 100000.0, bankNameOrCache: "Bank")
     ]
+
     
-    var dataLabel = [
-    "Total balance",
-    "Total balance",
-    "Total balance",
-    "Total balance"
-    ]
+    let walletHeader = WalletsHeaderView()
+    
     
      let walletCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -72,10 +69,20 @@ class TransactionsViewController: UIViewController {
         
         walletCollectionViewConstraint()
         
+        view.addSubview(walletHeader)
+        
+        NSLayoutConstraint.activate([
+         
+            walletHeader.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -300),
+            walletHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            walletHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+        ])
+        
         viewInfoConfigure()
         walletCollectionView.dataSource = self
         walletCollectionView.delegate = self
         walletCollectionView.register(WalletCollectionViewCell.self, forCellWithReuseIdentifier: "WalletCollectionViewCell")
+        walletHeader.delegate = self
         
         
         
@@ -174,12 +181,17 @@ class TransactionsViewController: UIViewController {
         
         
         
+        
 
         NSLayoutConstraint.activate([
             viewInfo.topAnchor.constraint(equalTo: view.topAnchor, constant: 118),
             viewInfo.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             viewInfo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),viewInfo.widthAnchor.constraint(equalToConstant: 358),
-            viewInfo.heightAnchor.constraint(equalToConstant: 97)
+            viewInfo.heightAnchor.constraint(equalToConstant: 97),
+            
+            walletHeader.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+            walletHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            walletHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
         
 
@@ -189,6 +201,30 @@ class TransactionsViewController: UIViewController {
     
 
 
+}
+
+
+extension TransactionsViewController {
+    
+    override func setupViews() {
+        super.setupViews()
+        
+    }
+    override func constraintViews() {
+        super.constraintViews()
+    }
+    override func configureAppearance() {
+        super.configureAppearance()
+    }
+}
+extension TransactionsViewController: WalletsHeaderViewDelegate {
+    func didSignUpBtnTapped() {
+        let secondVc = StatisticsViewController()
+        secondVc.modalPresentationStyle = .fullScreen
+        self.present(secondVc, animated: true)
+    }
+    
+    
 }
 
 //MARK: - UICollectionDataSource
@@ -217,8 +253,8 @@ extension TransactionsViewController: UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WalletCollectionViewCell", for: indexPath) as! WalletCollectionViewCell
         
-        cell.backImage.image = UIImage(named: dataImage[indexPath.row])
-        cell.totalBalance.text = dataLabel[indexPath.row]
+        cell.setImage(image: dataImage[indexPath.row])
+        
         return cell
     }
     

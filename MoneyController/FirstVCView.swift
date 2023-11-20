@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FirstVCView: UIView {
+final class FirstVCView: BaseView {
     
     
     
@@ -77,24 +77,11 @@ class FirstVCView: UIView {
         label.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         return label
     }()
-    
-    
+}
 
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        viewInfoConfigure()
-        uIViewConfigure()
-        
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func viewInfoConfigure() {
-    
-        
+extension FirstVCView {
+    override func setupViews() {
+        super.setupViews()
         
         addSubview(monthBudget)
         addSubview(reMoney)
@@ -103,6 +90,11 @@ class FirstVCView: UIView {
         addSubview(progressView)
         addSubview(dailyBudget)
         addSubview(daysLegt)
+    }
+    override func constraintViews() {
+        super.constraintViews()
+        
+        translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             monthBudget.topAnchor.constraint(equalTo: topAnchor, constant: 10),
@@ -132,16 +124,12 @@ class FirstVCView: UIView {
             
             
         ])
-        
-        
     }
-    
-    private func uIViewConfigure () {
+    override func configureAppearance() {
+        super.configureAppearance()
+        
         backgroundColor = .white
         layer.cornerRadius = 9
-        translatesAutoresizingMaskIntoConstraints = false
-        
         
     }
-    
 }

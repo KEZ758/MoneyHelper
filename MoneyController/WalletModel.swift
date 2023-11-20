@@ -9,9 +9,11 @@ import UIKit
 
 struct WalletModel {
     
-    let cardImage: String
-    let iconImage: String
+    let cardImage: UIImage
+    let iconImage: UIImage
     let totalBalance: String
     let balance: Double
     let bankNameOrCache: String
+    
+    
 }
